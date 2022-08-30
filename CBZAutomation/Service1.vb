@@ -82,6 +82,7 @@ Public Class Service1
             loopCommitBatchID()
             'PANODA KUGADZIRWA
             getResponses()
+            getResponsesUSD()
             'getPayments()
             'looppaymentBatchID()
 
@@ -249,6 +250,54 @@ Public Class Service1
             writeErrorLogs(ex.ToString)
         End Try
     End Sub
+    'Get USD RESPONSES 
+Public Sub getResponsesUSD()
+        Try
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 Or SecurityProtocolType.Tls11 Or SecurityProtocolType.Tls
+            Dim proxyServer As WebProxy
+            getProxyCredentials()
+            proxyServer = New WebProxy(Posturl, True)
+            proxyServer.Credentials = New Net.NetworkCredential(username, password, "cbz")
+            Dim myUri As New Uri("https://ndasenda.azurewebsites.net/api/v1/deductions/responses/" + DateTime.Now.ToString("yyyyMMdd") + "/" + DateTime.Now.ToString("yyyyMMdd") + "/800083436")
+            'Dim myUri As New Uri("https://ndasenda.azurewebsites.net/api/v1/deductions/responses/20210818/20210823/800083436")
+            Dim request As WebRequest = WebRequest.Create(myUri)
+            request.Proxy = proxyServer
+            request.Headers.Add("Authorization", "Bearer " & Access_Token)
+            request.ContentType = "application/json"
+            request.PreAuthenticate = True
+            request.Method = "GET"
+            Dim responseFromServer As String = ""
+            Using response As WebResponse = request.GetResponse()
+                Using stream As Stream = response.GetResponseStream()
+                    Dim reader As StreamReader = New StreamReader(stream)
+                    responseFromServer = reader.ReadToEnd()
+                End Using
+            End Using
+            'writeErrorLogs(responseFromServer)
+            Dim response1() As GetResponses
+            Dim ser As JavaScriptSerializer = New JavaScriptSerializer()
+            response1 = ser.Deserialize(Of GetResponses())(responseFromServer.ToString)
+            For index As Integer = 0 To response1.Length - 1
+                If (checkresponseidExistance(response1(index).id.ToString) = True) Then
+                ElseIf (checkresponseidExistance(response1(index).id.ToString) = False) Then
+                    Using con As New SqlConnection(ConfigurationManager.ConnectionStrings("Constring2").ConnectionString)
+                        Dim InsertQuery As String = "insert into SSBDeductionResponses (id,deductionCode,recordsCount,totalAmount,creationDate) values ('" + response1(index).id.ToString + "','" + response1(index).deductionCode.ToString + "','" + response1(index).recordsCount.ToString + "','" + response1(index).totalAmount.ToString + "','" + response1(index).creationDate.ToString + "')"
+                        cmd = New SqlCommand(InsertQuery, con)
+                        If con.State = ConnectionState.Open Then
+                            con.Close()
+                        End If
+                        con.Open()
+                        cmd.ExecuteNonQuery()
+                        con.Close()
+                    End Using
+                End If
+            Next
+        Catch ex As Exception
+            writeErrorLogs(ex.ToString)
+        End Try
+    End Sub
+
+
     Function checkresponseidExistance(ByVal id As String) As Boolean
         Dim existance As Boolean = False
         Try
@@ -272,8 +321,55 @@ Public Class Service1
         End Try
         Return existance
     End Function
-
-    Public Sub getPayments()
+'Get payments for USD loans 
+Public Sub getPaymentsUSD()
+        Try
+            ' System.Net.ServicePointManager.ServerCertificateValidationCallback = Function(se As Object, cert As System.Security.Cryptography.X509Certificates.X509Certificate, chain As System.Security.Cryptography.X509Certificates.X509Chain, sslerror As System.Net.Security.SslPolicyErrors) True
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 Or SecurityProtocolType.Tls11 Or SecurityProtocolType.Tls
+            Dim proxyServer As WebProxy
+            getProxyCredentials()
+            proxyServer = New WebProxy(Posturl, True)
+            ' proxyServer.Credentials = New Net.NetworkCredential("Redsphereadmin", "Pass@word1", "cbz")
+            Dim myUri As New Uri("https://ndasenda.azurewebsites.net/api/v1/deductions/payments/" + DateTime.Now.ToString("yyyyMMdd") + "/" + DateTime.Now.ToString("yyyyMMdd") + "/800083436")
+            ' Dim myUri As New Uri("https://ndasenda.azurewebsites.net/api/v1/deductions/payments/20210818/20210823/800083436")
+            Dim request As WebRequest = WebRequest.Create(myUri)
+            request.Proxy = proxyServer
+            request.Headers.Add("Authorization", "Bearer " & Access_Token)
+            request.ContentType = "application/json"
+            request.PreAuthenticate = True
+            request.Method = "GET"
+            Dim responseFromServer As String = ""
+            Using response As WebResponse = request.GetResponse()
+                Using stream As Stream = response.GetResponseStream()
+                    Dim reader As StreamReader = New StreamReader(stream)
+                    responseFromServer = reader.ReadToEnd()
+                End Using
+            End Using
+            Dim response1() As GetPayments
+            Dim ser As JavaScriptSerializer = New JavaScriptSerializer()
+            response1 = ser.Deserialize(Of GetPayments())(responseFromServer.ToString)
+            For index As Integer = 0 To response1.Length - 1
+                If (checkpaymentidExistance(response1(index).id.ToString) = True) Then
+                ElseIf (checkpaymentidExistance(response1(index).id.ToString) = False) Then
+                    Using con As New SqlConnection(ConfigurationManager.ConnectionStrings("Constring2").ConnectionString)
+                        Dim InsertQuery As String = "insert into SSBDeductionPayments (id,deductionCode,creationDate,recordsCount,totalAmount) values ('" + response1(index).id.ToString + "','" + response1(index).deductionCode.ToString + "','" + response1(index).creationDate.ToString + "','" + response1(index).recordsCount.ToString + "','" + response1(index).totalAmount.ToString + "')"
+                        cmd = New SqlCommand(InsertQuery, con)
+                        If con.State = ConnectionState.Open Then
+                            con.Close()
+                        End If
+                        con.Open()
+                        cmd.ExecuteNonQuery()
+                        con.Close()
+                    End Using
+                End If
+            Next
+        Catch ex As Exception
+            writeErrorLogs(ex.ToString)
+        End Try
+    End Sub
+  
+  
+Public Sub getPayments()
         Try
             ' System.Net.ServicePointManager.ServerCertificateValidationCallback = Function(se As Object, cert As System.Security.Cryptography.X509Certificates.X509Certificate, chain As System.Security.Cryptography.X509Certificates.X509Chain, sslerror As System.Net.Security.SslPolicyErrors) True
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 Or SecurityProtocolType.Tls11 Or SecurityProtocolType.Tls
@@ -466,7 +562,7 @@ Public Class Service1
         Dim listOfAllSentToNdasenda As New List(Of Integer)
         Try
             Using con As New SqlConnection(ConfigurationManager.ConnectionStrings("Constring2").ConnectionString)
-                Using cmd = New SqlCommand("[dbo].[allLOansToSendToNdasendaUSDLOANS]  ", con)
+                Using cmd = New SqlCommand("[dbo].[allLOansToSendToNdasendaUSDLOANS]", con)
                     Dim ds As New DataSet
                     Dim adp = New SqlDataAdapter(cmd)
                     adp.Fill(ds, "cntrl")
