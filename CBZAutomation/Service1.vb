@@ -823,6 +823,7 @@ Public Sub sendSSBReg()
     Function checkcommitExistance(ByVal id As String) As Boolean
         Dim existance As Boolean = False
         Try
+
             Using con As New SqlConnection(ConfigurationManager.ConnectionStrings("Constring2").ConnectionString)
                 Dim SelectQuery As String = " select count(*) from SSBCommitResponse where id='" + id + "' "
                 cmd = New SqlCommand(SelectQuery, con)
