@@ -1,0 +1,87 @@
+﻿Installing assembly 'D:\CBZ\CBZAutomation\CBZAutomation\bin\Debug\CBZAutomation.exe'.
+Affected parameters are:
+   i = 
+   logfile = D:\CBZ\CBZAutomation\CBZAutomation\bin\Debug\CBZAutomation.InstallLog
+   assemblypath = D:\CBZ\CBZAutomation\CBZAutomation\bin\Debug\CBZAutomation.exe
+   logtoconsole = 
+Installing service CBZAutomation...
+Service CBZAutomation has been successfully installed.
+Creating EventLog source CBZAutomation in log Application...
+Committing assembly 'D:\CBZ\CBZAutomation\CBZAutomation\bin\Debug\CBZAutomation.exe'.
+Affected parameters are:
+   i = 
+   logfile = D:\CBZ\CBZAutomation\CBZAutomation\bin\Debug\CBZAutomation.InstallLog
+   assemblypath = D:\CBZ\CBZAutomation\CBZAutomation\bin\Debug\CBZAutomation.exe
+   logtoconsole = 
+Installing assembly 'C:\inetpub\wwwroot\CBZAutomation\CBZAutomation\bin\Debug\CBZAutomation.exe'.
+Affected parameters are:
+   i = 
+   logfile = C:\inetpub\wwwroot\CBZAutomation\CBZAutomation\bin\Debug\CBZAutomation.InstallLog
+   assemblypath = C:\inetpub\wwwroot\CBZAutomation\CBZAutomation\bin\Debug\CBZAutomation.exe
+   logtoconsole = 
+Installing service CBZAutomation...
+Service CBZAutomation has been successfully installed.
+Creating EventLog source CBZAutomation in log Application...
+Committing assembly 'C:\inetpub\wwwroot\CBZAutomation\CBZAutomation\bin\Debug\CBZAutomation.exe'.
+Affected parameters are:
+   i = 
+   logfile = C:\inetpub\wwwroot\CBZAutomation\CBZAutomation\bin\Debug\CBZAutomation.InstallLog
+   assemblypath = C:\inetpub\wwwroot\CBZAutomation\CBZAutomation\bin\Debug\CBZAutomation.exe
+   logtoconsole = 
+Installing assembly 'C:\inetpub\wwwroot\CBZAutomation\CBZAutomation\bin\Debug\CBZAutomation.exe'.
+Affected parameters are:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\inetpub\wwwroot\CBZAutomation\CBZAutomation\bin\Debug\CBZAutomation.exe
+   logfile = C:\inetpub\wwwroot\CBZAutomation\CBZAutomation\bin\Debug\CBZAutomation.InstallLog
+Installing service CBZAutomation...
+Service CBZAutomation has been successfully installed.
+Creating EventLog source CBZAutomation in log Application...
+Committing assembly 'C:\inetpub\wwwroot\CBZAutomation\CBZAutomation\bin\Debug\CBZAutomation.exe'.
+Affected parameters are:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\inetpub\wwwroot\CBZAutomation\CBZAutomation\bin\Debug\CBZAutomation.exe
+   logfile = C:\inetpub\wwwroot\CBZAutomation\CBZAutomation\bin\Debug\CBZAutomation.InstallLog
+Uninstalling assembly 'C:\inetpub\wwwroot\ndasendaredsphere\CBZAutomation\bin\Debug\CBZAutomation.exe'.
+Affected parameters are:
+   logtoconsole = 
+   assemblypath = C:\inetpub\wwwroot\ndasendaredsphere\CBZAutomation\bin\Debug\CBZAutomation.exe
+   logfile = C:\inetpub\wwwroot\ndasendaredsphere\CBZAutomation\bin\Debug\CBZAutomation.InstallLog
+Removing EventLog source CBZAutomation.
+Service CBZAutomation is being removed from the system...
+Service CBZAutomation was successfully removed from the system.
+Attempt to stop service CBZAutomation.
+Uninstalling assembly 'C:\inetpub\wwwroot\ndasendaredsphere\CBZAutomation\bin\Debug\CBZAutomation.exe'.
+Affected parameters are:
+   logtoconsole = 
+   assemblypath = C:\inetpub\wwwroot\ndasendaredsphere\CBZAutomation\bin\Debug\CBZAutomation.exe
+   logfile = C:\inetpub\wwwroot\ndasendaredsphere\CBZAutomation\bin\Debug\CBZAutomation.InstallLog
+Removing EventLog source CBZAutomation.
+Warning: The source CBZAutomation is not registered on the local machine.
+Service CBZAutomation is being removed from the system...
+An exception occurred during the uninstallation of the System.ServiceProcess.ServiceInstaller installer.
+System.ComponentModel.Win32Exception: The specified service does not exist as an installed service
+An exception occurred while uninstalling. This exception will be ignored and the uninstall will continue. However, the application might not be fully uninstalled after the uninstall is complete.
+Uninstalling assembly 'C:\inetpub\wwwroot\ndasendaredsphere\CBZAutomation\bin\Debug\CBZAutomation.exe'.
+Affected parameters are:
+   logtoconsole = 
+   assemblypath = C:\inetpub\wwwroot\ndasendaredsphere\CBZAutomation\bin\Debug\CBZAutomation.exe
+   logfile = C:\inetpub\wwwroot\ndasendaredsphere\CBZAutomation\bin\Debug\CBZAutomation.InstallLog
+Removing EventLog source CBZAutomation.
+Warning: The source CBZAutomation is not registered on the local machine.
+Service CBZAutomation is being removed from the system...
+An exception occurred during the uninstallation of the System.ServiceProcess.ServiceInstaller installer.
+System.ComponentModel.Win32Exception: The specified service does not exist as an installed service
+An exception occurred while uninstalling. This exception will be ignored and the uninstall will continue. However, the application might not be fully uninstalled after the uninstall is complete.
+Uninstalling assembly 'C:\inetpub\wwwroot\ndasendaredsphere\CBZAutomation\bin\Debug\CBZAutomation.exe'.
+Affected parameters are:
+   logtoconsole = 
+   assemblypath = C:\inetpub\wwwroot\ndasendaredsphere\CBZAutomation\bin\Debug\CBZAutomation.exe
+   logfile = C:\inetpub\wwwroot\ndasendaredsphere\CBZAutomation\bin\Debug\CBZAutomation.InstallLog
+Removing EventLog source CBZAutomation.
+Warning: The source CBZAutomation is not registered on the local machine.
+Service CBZAutomation is being removed from the system...
+An exception occurred during the uninstallation of the System.ServiceProcess.ServiceInstaller installer.
+System.ComponentModel.Win32Exception: The specified service does not exist as an installed service
+An exception occurred while uninstalling. This exception will be ignored and the uninstall will continue. However, the application might not be fully uninstalled after the uninstall is complete.
