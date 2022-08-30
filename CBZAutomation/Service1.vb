@@ -72,6 +72,7 @@ Public Class Service1
 
             getProxyCredentials()
             sendSSBReg()
+            sendSSBRegUSD()
             'PANODA KUGADZIRISWA
             writeErrorLogs(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
             loopRecordsBatchID()
@@ -457,7 +458,81 @@ Public Class Service1
         End Try
         Return existance
     End Function
-    Public Sub sendSSBReg()
+   'allLOansToSendToNdasendaUSDLOANS  this handdles the sending of loans to ndasenda for USD only
+    Public Sub sendSSBRegUSD()
+        Dim builder As New System.Text.StringBuilder
+        Dim json, mainData As String
+        Dim totalAmount As Decimal
+        Dim listOfAllSentToNdasenda As New List(Of Integer)
+        Try
+            Using con As New SqlConnection(ConfigurationManager.ConnectionStrings("Constring2").ConnectionString)
+                Using cmd = New SqlCommand("[dbo].[allLOansToSendToNdasendaUSDLOANS]  ", con)
+                    Dim ds As New DataSet
+                    Dim adp = New SqlDataAdapter(cmd)
+                    adp.Fill(ds, "cntrl")
+                    If ds.Tables(0).Rows.Count > 0 Then
+                        For index As Integer = 0 To ds.Tables(0).Rows.Count - 1
+                            listOfAllSentToNdasenda.Add(ds.Tables(0).Rows(index).Item("reference"))
+                            json = "{""idNumber"": """ + ds.Tables(0).Rows(index).Item("IDNO").ToString + """,""ecNumber"": """ + ds.Tables(0).Rows(index).Item("ECNO").ToString + """,""type"": """ + ds.Tables(0).Rows(index).Item("type").ToString + """,""reference"": """ + ds.Tables(0).Rows(index).Item("reference").ToString + """,""startDate"": """ + ds.Tables(0).Rows(index).Item("StartDate").ToString + """,""endDate"": """ + ds.Tables(0).Rows(index).Item("EndDate").ToString + """,""name"": """ + ds.Tables(0).Rows(index).Item("FORENAMES").ToString + """,""surname"": """ + ds.Tables(0).Rows(index).Item("SURNAME").ToString + """,""amount"":" + ds.Tables(0).Rows(index).Item("Payment").ToString + ",""totalAmount"":" + ds.Tables(0).Rows(index).Item("total").ToString + "}"
+                            builder.Append(json)
+                            If index <> (ds.Tables(0).Rows.Count - 1) Then
+                                builder.Append(",")
+                            End If
+                            totalAmount += CDec(ds.Tables(0).Rows(index).Item("Payment").ToString())
+
+                        Next
+                        mainData = "{""recordsCount"": " + ds.Tables(0).Rows.Count.ToString + ",""totalAmount"": " + totalAmount.ToString() + ",""securityToken"": ""110423"",""deductionCode"": ""800083436"",""status"": ""DRAFT"",""records"": [" + builder.ToString + "]}"
+                        writeErrorLogs(mainData)
+                        System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 Or SecurityProtocolType.Tls11 Or SecurityProtocolType.Tls
+                        Dim proxyServer As WebProxy
+                        getProxyCredentials()
+                        proxyServer = New WebProxy(Posturl, True)
+                        proxyServer.Credentials = New Net.NetworkCredential(username, password, "cbz")
+                        writeErrorLogs(Posturl + username + password)
+                        Dim myUri As New Uri("https://ndasenda.azurewebsites.net/api/v1/deductions/requests")
+                        Dim request As HttpWebRequest = WebRequest.Create(myUri)
+                        request.Proxy = proxyServer
+                        Dim bytes As Byte()
+                        bytes = System.Text.Encoding.ASCII.GetBytes(mainData.ToString)
+                        request.Headers.Add("Authorization", "Bearer " + Access_Token)
+                        request.ContentType = "application/json"
+                        request.ContentLength = bytes.Length
+                        request.Method = "POST"
+                        Dim requestStream As Stream = request.GetRequestStream()
+                        requestStream.Write(bytes, 0, bytes.Length)
+                        requestStream.Close()
+                        Dim responseFromServer1 As String = ""
+                        Using response As HttpWebResponse = request.GetResponse()
+                            If (response.StatusCode = HttpStatusCode.Accepted Or response.StatusCode = HttpStatusCode.OK Or response.StatusCode = HttpStatusCode.Created) Then
+
+                                For Each loanSentToNdasenda As String In listOfAllSentToNdasenda
+                                    updateQuestApplicationWithStatus(loanSentToNdasenda)
+                                    updateNdasendaChanges(loanSentToNdasenda)
+                                Next
+                                Using stream As Stream = response.GetResponseStream()
+                                    Dim reader As StreamReader = New StreamReader(stream)
+                                    responseFromServer1 = reader.ReadToEnd()
+                                End Using
+
+                                Dim response1 As PostDeductions
+                                Dim ser As JavaScriptSerializer = New JavaScriptSerializer()
+                                response1 = ser.Deserialize(Of PostDeductions)(responseFromServer1.ToString)
+                                RecordRegResponse(response1.id, response1.recordsCount, response1.totalAmount, response1.deductionCode.ToString, response1.status, response1.creationDate)
+                            Else
+                                writeErrorLogs("THE USD REQUEST HAD THE RESPONSE " + response.StatusCode.ToString)
+
+                            End If
+                        End Using
+                    End If
+                End Using
+            End Using
+        Catch ex As Exception
+            writeErrorLogs(ex.ToString)
+        End Try
+    End Sub
+
+
+Public Sub sendSSBReg()
         Dim builder As New System.Text.StringBuilder
         Dim json, mainData As String
         Dim totalAmount As Decimal
