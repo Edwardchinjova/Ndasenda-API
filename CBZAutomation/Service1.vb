@@ -258,7 +258,7 @@ Public Sub getResponsesUSD()
             getProxyCredentials()
             proxyServer = New WebProxy(Posturl, True)
             proxyServer.Credentials = New Net.NetworkCredential(username, password, "cbz")
-            Dim myUri As New Uri("https://ndasenda.azurewebsites.net/api/v1/deductions/responses/" + DateTime.Now.ToString("yyyyMMdd") + "/" + DateTime.Now.ToString("yyyyMMdd") + "/800083436")
+            Dim myUri As New Uri("https://ndasenda.azurewebsites.net/api/v1/deductions/responses/" + DateTime.Now.ToString("yyyyMMdd") + "/" + DateTime.Now.ToString("yyyyMMdd") + "/800184021")
             'Dim myUri As New Uri("https://ndasenda.azurewebsites.net/api/v1/deductions/responses/20210818/20210823/800083436")
             Dim request As WebRequest = WebRequest.Create(myUri)
             request.Proxy = proxyServer
@@ -330,7 +330,7 @@ Public Sub getPaymentsUSD()
             getProxyCredentials()
             proxyServer = New WebProxy(Posturl, True)
             ' proxyServer.Credentials = New Net.NetworkCredential("Redsphereadmin", "Pass@word1", "cbz")
-            Dim myUri As New Uri("https://ndasenda.azurewebsites.net/api/v1/deductions/payments/" + DateTime.Now.ToString("yyyyMMdd") + "/" + DateTime.Now.ToString("yyyyMMdd") + "/800083436")
+            Dim myUri As New Uri("https://ndasenda.azurewebsites.net/api/v1/deductions/payments/" + DateTime.Now.ToString("yyyyMMdd") + "/" + DateTime.Now.ToString("yyyyMMdd") + "/800184021")
             ' Dim myUri As New Uri("https://ndasenda.azurewebsites.net/api/v1/deductions/payments/20210818/20210823/800083436")
             Dim request As WebRequest = WebRequest.Create(myUri)
             request.Proxy = proxyServer
@@ -577,7 +577,7 @@ Public Sub getPayments()
                             totalAmount += CDec(ds.Tables(0).Rows(index).Item("Payment").ToString())
 
                         Next
-                        mainData = "{""recordsCount"": " + ds.Tables(0).Rows.Count.ToString + ",""totalAmount"": " + totalAmount.ToString() + ",""securityToken"": ""110423"",""deductionCode"": ""800083436"",""status"": ""DRAFT"",""records"": [" + builder.ToString + "]}"
+                        mainData = "{""recordsCount"": " + ds.Tables(0).Rows.Count.ToString + ",""totalAmount"": " + totalAmount.ToString() + ",""securityToken"": ""110423"",""deductionCode"": ""800184021"",""status"": ""DRAFT"",""records"": [" + builder.ToString + "]}"
                         writeErrorLogs(mainData)
                         System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 Or SecurityProtocolType.Tls11 Or SecurityProtocolType.Tls
                         Dim proxyServer As WebProxy
